@@ -1,17 +1,17 @@
 <template>
   <div>
-    <button class="generate-assessment" @click="generateAssessment">
-      生成测评报告
+    <button class="get-assessment-info" @click="getAssessmentInfo">
+      获取测评基本信息
     </button>
 
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>生成测评报告</span>
+        <span>获取测评基本信息</span>
         <el-button style="float: right; padding: 3px 0" type="text"
           >操作按钮</el-button
         >
       </div>
-      <div v-for="(value, key, index) in assessment" v-bind:key="index">
+      <div v-for="(value, key, index) in assessmentInfo" v-bind:key="index">
         {{ key }} : {{ value }}
       </div>
     </el-card>
@@ -23,12 +23,12 @@ import request from "@/utils/request"
 import getTime from "@/utils/timestamp"
 
 export default {
-  name: "GenerateAssessment",
+  name: "GetAssessmentInfo",
   components: {},
   props: {},
   data() {
     return {
-      assessment: {},
+      assessmentInfo: {},
     }
   },
   computed: {},
@@ -36,36 +36,17 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    generateAssessment() {
+    getAssessmentInfo() {
       const time = getTime()
       request({
         method: "POST",
-        url: "/report/generate.do?evaluationCode=TNBPC",
+        url: "/basic/information/load.do?evaluationCode=TNBPC",
         //data用来设置post请求体
         data: {
           appId: "5fdd838e87a7ee3d74ada9a4",
           version: "2.0",
           timestamp: time,
           nonceStr: "",
-          reqData: {
-            evaluationParams: {
-              birthday: "1990-01-01",
-              userActivityLevel: "3",
-              pastHistory: ["4"],
-              gender: "2",
-              smoke: ["4"],
-              weight: "55.0",
-              userId: "912999",
-              diabetesFamilyHistory: ["3"],
-              sleep: ["1", "2", "3", "99"],
-              abnormalSymptoms: ["1", "2", "3", "99"],
-              psychology: ["2"],
-              waist: "90",
-              diet: ["1", "2", "3", "4", "99"],
-              sport: ["3"],
-              height: "160",
-            },
-          },
         },
         headers: {
           token:
@@ -76,7 +57,7 @@ export default {
           console.log(res.data.resData)
           console.log(typeof res.data.resData)
           const assessment = JSON.parse(res.data.resData)
-          this.assessment = assessment
+          this.assessmentInfo = assessment
         })
         .catch((err) => {
           console.log(err)
@@ -86,4 +67,26 @@ export default {
 }
 </script>
 
-<style scoped lang="less"></style>
+<style>
+.text {
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 18px;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
+}
+
+.box-card {
+  width: 900px;
+  margin-top: 50px;
+}
+</style>

@@ -1,17 +1,17 @@
 <template>
   <div>
-    <button class="generate-assessment" @click="generateAssessment">
-      生成测评报告
+    <button class="get-assessment-que" @click="getAssessmentQue">
+      获取测评问卷
     </button>
 
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>生成测评报告</span>
+        <span>获取测评问卷</span>
         <el-button style="float: right; padding: 3px 0" type="text"
           >操作按钮</el-button
         >
       </div>
-      <div v-for="(value, key, index) in assessment" v-bind:key="index">
+      <div v-for="(value, key, index) in assessmentQue" v-bind:key="index">
         {{ key }} : {{ value }}
       </div>
     </el-card>
@@ -23,12 +23,12 @@ import request from "@/utils/request"
 import getTime from "@/utils/timestamp"
 
 export default {
-  name: "GenerateAssessment",
+  name: "GetAssessmentQue",
   components: {},
   props: {},
   data() {
     return {
-      assessment: {},
+      assessmentQue: {},
     }
   },
   computed: {},
@@ -36,11 +36,11 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    generateAssessment() {
+    getAssessmentQue() {
       const time = getTime()
       request({
         method: "POST",
-        url: "/report/generate.do?evaluationCode=TNBPC",
+        url: "/content/load.do?evaluationCode=TNBPC",
         //data用来设置post请求体
         data: {
           appId: "5fdd838e87a7ee3d74ada9a4",
@@ -48,22 +48,9 @@ export default {
           timestamp: time,
           nonceStr: "",
           reqData: {
-            evaluationParams: {
-              birthday: "1990-01-01",
-              userActivityLevel: "3",
-              pastHistory: ["4"],
-              gender: "2",
-              smoke: ["4"],
-              weight: "55.0",
-              userId: "912999",
-              diabetesFamilyHistory: ["3"],
-              sleep: ["1", "2", "3", "99"],
-              abnormalSymptoms: ["1", "2", "3", "99"],
-              psychology: ["2"],
-              waist: "90",
-              diet: ["1", "2", "3", "4", "99"],
-              sport: ["3"],
-              height: "160",
+            questionnaireParams: {
+              userId: "12344",
+              gender: "1",
             },
           },
         },
@@ -76,7 +63,7 @@ export default {
           console.log(res.data.resData)
           console.log(typeof res.data.resData)
           const assessment = JSON.parse(res.data.resData)
-          this.assessment = assessment
+          this.assessmentQue = assessment
         })
         .catch((err) => {
           console.log(err)
